@@ -10,9 +10,21 @@ class KategoriController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function getKategoriCount()
     {
-        $kategoris = Kategori::latest()->get();
+        return Kategori::count();   
+    }
+    
+    public function index(Request $request)
+    {
+        $q = $request->query('q');
+
+        $kategoris = Kategori::query()
+            ->when($q, function ($query) use ($q) {
+                $query->where('nama_kategori', 'like', "%{$q}%");
+            })
+            ->get();
+
         return view('admin.kategori.index', compact('kategoris'));
     }
 

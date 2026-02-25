@@ -7,10 +7,35 @@
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-semibold">Daftar Kategori</h1>
 
-        <a href="{{ route('admin.kategori.create') }}"
-           class="px-4 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800 text-sm">
-            + Tambah Kategori
-        </a>
+        <div class="flex items-center gap-3">
+            {{-- Search --}}
+            <form action="{{ route('admin.kategori.index') }}" method="GET" class="flex items-center gap-2">
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ request('q') }}"
+                    placeholder="Cari nama kategori..."
+                    class="w-64 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-300"/>
+                <button
+                    type="submit"
+                    class="px-3 py-2 rounded-lg bg-slate-200 text-slate-800 hover:bg-slate-300 text-sm">
+                    Cari
+                </button>
+
+                @if(request('q'))
+                    <a
+                        href="{{ route('admin.kategori.index') }}"
+                        class="px-3 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm">
+                        Reset
+                    </a>
+                @endif
+            </form>
+
+            <a href="{{ route('admin.kategori.create') }}"
+            class="px-4 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800 text-sm">
+                + Tambah
+            </a>
+        </div>
     </div>
 
     {{-- Flash Message --}}

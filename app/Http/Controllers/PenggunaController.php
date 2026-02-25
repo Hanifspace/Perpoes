@@ -10,10 +10,29 @@ class PenggunaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+        public function getPenggunaCount()
     {
-        $users = User::where('role', 'user')->get();
-        return view('admin.pengguna.index', compact('users'));
+        return User::where('role', 'user')->count();   
+    }
+
+    public function index(Request $request)
+    {
+        $q = $request->query('q');
+
+        $nama = User::query()
+            ->where('role', 'user')
+            ->when($q, function ($query) use ($q) {
+                $query->where(function ($sub) use ($q) {
+                    $sub->where('nama_lengkap', 'like', "%{$q}%")
+                        ->orWhere('name', 'like', "%{$q}%")
+                        ->orWhere('email', 'like', "%{$q}%")
+                        ->orWhere('alamat', 'like', "%{$q}%");
+                });
+            })
+            ->get();
+
+        return view('admin.pengguna.index', compact('nama'));
     }
 
     public function index2()

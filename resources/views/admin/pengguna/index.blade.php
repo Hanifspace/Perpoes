@@ -5,7 +5,32 @@
 
     {{-- Header --}}
     <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-semibold">Daftar User</h1>
+        <h1 class="text-2xl font-semibold">Daftar Pengguna</h1>
+
+        <div class="flex items-center gap-3">
+            {{-- Search --}}
+            <form action="{{ route('admin.pengguna.index') }}" method="GET" class="flex items-center gap-2">
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ request('q') }}"
+                    placeholder="Cari nama/username/email..."
+                    class="w-64 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-300"/>
+                <button
+                    type="submit"
+                    class="px-3 py-2 rounded-lg bg-slate-200 text-slate-800 hover:bg-slate-300 text-sm">
+                    Cari
+                </button>
+
+                @if(request('q'))
+                    <a
+                        href="{{ route('admin.pengguna.index') }}"
+                        class="px-3 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm">
+                        Reset
+                    </a>
+                @endif
+            </form>
+        </div>
     </div>
 
     {{-- Table --}}
@@ -24,7 +49,7 @@
                 </thead>
 
                 <tbody class="divide-y divide-slate-200">
-                    @foreach ($users as $user)
+                    @forelse ($nama as $user)
                     <tr class="hover:bg-slate-50">
                         <td class="px-4 py-3 text-slate-600">
                             {{ $loop->iteration }}
@@ -48,7 +73,13 @@
                             </div>
                         </td>
                     </tr>
-                    @endforeach
+                     @empty
+                    <tr>
+                        <td colspan="6" class="px-4 py-6 text-center text-slate-500">
+                            Belum ada data pengguna.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

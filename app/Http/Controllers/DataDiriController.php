@@ -3,20 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\buku;
 
-class KatalogController extends Controller
+class DataDiriController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-
     public function index()
-    {   
-
-        $bukus = buku::with('kategori')->latest()->get();
-
-        return view('user.pinjam.index', compact('bukus'));
+    {
+        //
     }
 
     /**

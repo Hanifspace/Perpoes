@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -10,9 +11,28 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    public function getPetugasCount()
     {
-        $nama = User::where('role', 'petugas')->get();
+        return User::where('role', 'petugas')->count();  
+    }
+
+    public function index(Request $request)
+    {
+        $q = $request->query('q');
+
+        $nama = User::query()
+            ->where('role', 'petugas')
+            ->when($q, function ($query) use ($q) {
+                $query->where(function ($sub) use ($q) {
+                    $sub->where('nama_lengkap', 'like', "%{$q}%")
+                        ->orWhere('name', 'like', "%{$q}%")
+                        ->orWhere('email', 'like', "%{$q}%")
+                        ->orWhere('alamat', 'like', "%{$q}%");
+                });
+            })
+            ->get();
+
         return view('admin.petugas.index', compact('nama'));
     }
 
@@ -106,5 +126,26 @@ class UserController extends Controller
             $petugas->delete();
 
             return redirect()->route('admin.petugas.index')->with('success', 'Petugas berhasil dihapus.');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $q = $request->q;
+
+        $nama = User::query()
+            ->when($q, function ($query) use ($q) {
+                $query->where('nama_lengkap', 'like', "%{$q}%")
+                    ->orWhere('name', 'like', "%{$q}%")
+                    ->orWhere('email', 'like', "%{$q}%");
+            })
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $pdf = Pdf::loadView('admin.petugas.export', [
+            'nama' => $nama,
+            'q'    => $q,
+        ])->setPaper('A4', 'landscape'); // biar muat tabel lebar
+
+        return $pdf->download('daftar-petugas.pdf');
     }
 }

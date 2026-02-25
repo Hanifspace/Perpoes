@@ -14,7 +14,6 @@
     </div>
   @endif
 
-  {{-- Grid Cards: 2 kolom mobile → 3 tablet → 4 lg → 6 xl --}}
   <div class="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
     @forelse ($bukus as $buku)
       @php

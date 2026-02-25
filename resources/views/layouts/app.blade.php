@@ -174,7 +174,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('admin.peminjaman.index') }}"
                        class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
                         <i class="fa-solid fa-right-left w-5 text-blue-600"></i>
                         <span class="font-medium">Peminjaman &amp; Pengembalian</span>
@@ -245,7 +245,7 @@
                         <div class="text-xs text-slate-500 mt-1">{{ auth()->user()->email ?? 'admin@perpoestakaan.com' }}</div>
                     </div>
 
-                    <a href="#"
+                    <a href="{{ route('profile.edit') }}"
                        class="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors border-t border-slate-200">
                         <i class="fa-solid fa-id-badge text-blue-600 w-4"></i>
                         <span>Lihat Profile</span>

@@ -8,6 +8,8 @@ use App\Http\Controllers\BukuController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\PinjamUserController;
+use App\Http\Controllers\PinjamAdminController;
+use App\Http\Controllers\DataDiriController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\FavoritController;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +35,8 @@ Route::post('/manajemen/tambah', [UserController::class, 'store'])->name('admin.
 Route::delete('/manajemen/{id}', [UserController::class, 'destroy'])->name('admin.petugas.destroy');
 Route::get('/manajemen/{id}/edit', [UserController::class, 'edit'])->name('admin.petugas.edit');
 Route::put('/manajemen/{id}', [UserController::class, 'update'])->name('admin.petugas.update');
+Route::get('/admin/petugas/export/pdf', [UserController::class, 'exportPdf'])
+    ->name('admin.petugas.export');
 
 //admin - pengguna
 Route::get('/manajemen-user', [PenggunaController::class, 'index'])->name('admin.pengguna.index');
@@ -56,6 +60,10 @@ Route::get('/buku/{buku}', [BukuController::class, 'show'])->name('admin.buku.sh
 Route::get('/buku/{buku}/edit', [BukuController::class, 'edit'])->name('admin.buku.edit');
 Route::put('/buku/{buku}', [BukuController::class, 'update'])->name('admin.buku.update');
 Route::delete('/buku/{buku}', [BukuController::class, 'destroy'])->name('admin.buku.destroy');
+
+// admin - pinjam
+Route::get('/peminjaman', [PinjamAdminController::class, 'index'])->name('admin.peminjaman.index');
+
 });
 
 //petugas
@@ -74,6 +82,10 @@ Route::get('/favorit', [FavoritController::class, 'index'])->name('user.favorit.
 
 Route::post('/favorit/{id}', [FavoritController::class, 'store'])->name('user.favorit.store');
 Route::delete('/favorit/{id}', [FavoritController::class, 'destroy'])->name('user.favorit.destroy');
+
+
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

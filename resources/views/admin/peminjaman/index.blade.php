@@ -24,7 +24,7 @@
                 <td class="px-6 py-3">{{ $pinjam->tanggal_peminjaman }}</td>
                 <td class="px-6 py-3">{{ $pinjam->tanggal_pengembalian }}</td>
                 <td class="px-6 py-3">
-                    <form action="{{ route('admin.peminjaman.updateStatus', $pinjam) }}" method="POST">
+                    <form action="#" method="POST">
                         @csrf
                         @method('PUT')
 
@@ -36,6 +36,4 @@
         @endforeach
     </tbody>
 </table>
-
-
 @endsection

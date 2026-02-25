@@ -12,9 +12,27 @@ class BukuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function getBukuCount()
     {
-        $bukus = Buku::with('kategori')->latest()->get();
+        return Buku::count();   
+    }
+
+    public function index(Request $request)
+    {
+        $q = $request->query('q');
+
+        $bukus = Buku::query()
+            ->with('kategori')
+            ->when($q, function ($query) use ($q) {
+                $query->where(function ($sub) use ($q) {
+                    $sub->where('judul', 'like', "%{$q}%")
+                        ->orWhere('penulis', 'like', "%{$q}%")
+                        ->orWhere('penerbit', 'like', "%{$q}%")
+                        ->orWhere('kode_buku', 'like', "%{$q}%"); 
+                });
+            })
+            ->get();
+
         return view('admin.buku.index', compact('bukus'));
     }
 
