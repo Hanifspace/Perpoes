@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buku;
+use App\Models\pinjam;
+use App\Models\Kategori;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class FavoritController extends Controller
@@ -12,7 +15,8 @@ class FavoritController extends Controller
      */
     public function index()
     {
-        $bukus = auth()->user()->favorit; 
+        $user = Auth::user();
+        $bukus = $user->favorit; 
         return view('user.favorit.index', compact('bukus'));
     }
 
@@ -32,13 +36,13 @@ class FavoritController extends Controller
     {
         $buku = Buku::findOrFail($id);
 
-        // Mengecek apakah buku sudah ada di favorit
-        if (auth()->user()->favorit->contains($buku->id)) {
+        $user = Auth::user();
+        if ($user->favorit->contains($buku->id)) {
             return back()->with('error', 'Buku sudah ada di favorit!');
         }
 
         // Menambahkan buku ke favorit
-        auth()->user()->favorit()->attach($buku);
+        $user->favorit()->attach($buku);
 
         return back()->with('success', 'Buku berhasil ditambahkan ke favorit!');
     }
@@ -73,14 +77,13 @@ class FavoritController extends Controller
     public function destroy($id)
     {
         $buku = Buku::findOrFail($id);
+        $user = Auth::user();
 
-        // Mengecek apakah buku ada di favorit
-        if (!auth()->user()->favorit->contains($buku->id)) {
+        if ($user->favorit->contains($buku->id)) {
             return back()->with('error', 'Buku tidak ada di favorit!');
         }
-
-        // Menghapus buku dari favorit
-        auth()->user()->favorit()->detach($buku);
+   
+        $user->favorit()->detach($buku);
 
         return back()->with('success', 'Buku berhasil dihapus dari favorit!');
     }

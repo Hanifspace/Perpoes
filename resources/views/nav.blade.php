@@ -105,7 +105,7 @@
         </div>
         <div class="hidden lg:block text-left leading-tight">
           <div class="text-xs font-semibold text-slate-900">{{ auth()->user()->name }}</div>
-          <div class="text-xs text-slate-500">{{ auth()->user()->role }}</div>
+          <div class="text-xs text-slate-500">{{ auth()->user()->email }}</div>
         </div>
         <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform" id="chevronIcon"></i>
       </button>
@@ -113,8 +113,8 @@
       <div id="profileMenu"
            class="hidden absolute right-0 mt-3 w-56 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden dropdown-animation">
         <div class="px-4 py-3 bg-gradient-to-r from-blue-50 to-slate-50 border-b border-slate-200">
-          <div class="text-sm font-semibold text-slate-900">Nama Pengguna</div>
-          <div class="text-xs text-slate-500 mt-1">user@perpoestakaan.com</div>
+          <div class="text-sm font-semibold text-slate-900">{{ auth()->user()->name }}</div>
+          <div class="text-xs text-slate-500 mt-1">{{ auth()->user()->email }}</div>
         </div>
 
         <a href="#"

@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\PinjamUserController;
 use App\Http\Controllers\PinjamAdminController;
+use App\Http\Controllers\LaporanAdminController;
 use App\Http\Controllers\DataDiriController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\FavoritController;
@@ -61,8 +62,16 @@ Route::get('/buku/{buku}/edit', [BukuController::class, 'edit'])->name('admin.bu
 Route::put('/buku/{buku}', [BukuController::class, 'update'])->name('admin.buku.update');
 Route::delete('/buku/{buku}', [BukuController::class, 'destroy'])->name('admin.buku.destroy');
 
-// admin - pinjam
+// admin - peminjaman
 Route::get('/peminjaman', [PinjamAdminController::class, 'index'])->name('admin.peminjaman.index');
+Route::get('/laporan{id}', [LaporanAdminController::class, 'index'])->name('admin.laporan.index');
+Route::put('/peminjaman/{id}', [PinjamAdminController::class, 'update'])->name('peminjaman.update');
+Route::get('/peminjaman/{id}/laporan', [PinjamAdminController::class, 'downloadLaporan'])
+->name('peminjaman.laporan');
+
+//admin -pengembalian
+Route::get('/pengembalian', [PinjamAdminController::class, 'pengembalian'])->name('admin.pengembalian.index');
+
 
 });
 
@@ -72,11 +81,11 @@ Route::get('/petugas', [UserController::class, 'index'])->name('petugas.dashboar
 //pengguna
 Route::get('/pengguna', [PenggunaController::class, 'index2'])->name('user.dashboard');
 Route::get('/riwayat', [PenggunaController::class, 'index3'])->name('user.riwayat.index');
+Route::get('/user/riwayat/{id}/bukti-peminjaman', [RiwayatController::class, 'buktiPeminjaman'])->name('user.riwayat.bukti.peminjaman');
 Route::get('/pinjam/create/{buku_id}', [PinjamUserController::class, 'create'])->name('user.pinjam.create');
 Route::post('/pinjam', [PinjamUserController::class, 'store'])->name('user.pinjam.store');
 Route::get('/detail/{id}', [PinjamUserController::class, 'show'])->name('user.pinjam.show');
 Route::get('/katalog', [KatalogController::class, 'index'])->name('user.pinjam.index');
-Route::get('riwayat', [RiwayatController::class, 'index'])->name('user.riwayat.index');
 Route::get('/favorit', [FavoritController::class, 'index'])->name('user.favorit.index');
 
 
@@ -92,6 +101,7 @@ Route::get('/dashboard', function () {
     
 })->middleware(['auth', 'verified'])->name('dashboard');
 Route::middleware('auth')->group(function () {
+    Route::get('riwayat', [RiwayatController::class, 'index'])->name('user.riwayat.index');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

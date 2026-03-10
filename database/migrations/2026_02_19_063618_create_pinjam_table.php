@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('tanggal_peminjaman');
             $table->date('tanggal_pengembalian')->nullable();
-            $table->enum('status', ['menunggu', 'dipinjam', 'dikembalikan'])->default('menunggu');
+            $table->enum('status', ['menunggu', 'dipinjam', 'dikembalikan', 'ditolak'])->default('menunggu');
             
             // Definisikan kolom foreign key
             $table->unsignedBigInteger('buku_id');

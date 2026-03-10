@@ -3,19 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\buku;
+use App\Models\Pinjam;
+use App\Models\Buku;
 
-class KatalogController extends Controller
+class LaporanAdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-
-    public function index()
-    {   
-
-        $bukus = buku::with('kategori')->latest()->get();
-        return view('user.pinjam.index', compact('bukus'));
+    public function index(string $id)
+    {
+        $laporan = Pinjam::with(['user', 'buku'])->findOrFail($id);
+        return view('admin.laporan.index', compact('laporan'));
     }
 
     /**
@@ -39,7 +38,7 @@ class KatalogController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**

@@ -24,6 +24,10 @@ class Pinjam extends Model
         return $this->belongsTo(Buku::class, 'buku_id');
     }
 
+        public function kategori()
+    {
+        return $this->belongsTo(Kategori::class, 'kategori_id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class);

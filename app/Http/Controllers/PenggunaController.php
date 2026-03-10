@@ -41,11 +41,6 @@ class PenggunaController extends Controller
         return view('user.dashboard', compact('users'));
     }
 
-    public function index3()
-    {
-        return view('user.riwayat.index');
-
-    }
 
     /**
      * Show the form for creating a new resource.

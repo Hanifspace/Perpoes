@@ -13,7 +13,7 @@ class PinjamUserController extends Controller
      */
     public function index()
     {
-
+        
     }
 
     /**

@@ -146,7 +146,6 @@
                                      focus:border-slate-800 focus:ring focus:ring-slate-800/20"
                               placeholder="Tulis deskripsi singkat buku...">{{ old('sinopsis') }}</textarea>
                 </div>
-
             </div>
 
             <div class="flex justify-end gap-2 mt-4 pt-3 border-t border-slate-200">

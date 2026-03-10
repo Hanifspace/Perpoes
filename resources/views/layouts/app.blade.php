@@ -136,7 +136,7 @@
         <nav class="px-3 py-4 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
             <ul class="space-y-2">
                     <a href="{{ route('admin.dashboard') }}"
-                       class="sidebar-link active flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700">
+                       class="sidebar-link {{ Route::currentRouteName() == 'admin.dashboard' ? 'active' : '' }}  flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700">
                         <i class="fa-solid fa-gauge-high w-5 text-blue-600"></i>
                         <span class="font-medium">Dashboard</span>
                     </a>
@@ -144,7 +144,7 @@
                 @if (auth()->check() && auth()->user()->role === 'admin')
                 <li>
                     <a href="{{ route('admin.petugas.index') }}"
-                       class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
+                       class="sidebar-link {{ Route::currentRouteName() == 'admin.petugas.index' ? 'active' : '' }} flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
                         <i class="fa-solid fa-user-gear w-5 text-blue-600"></i>
                         <span class="font-medium">Manajemen Petugas</span>
                     </a>
@@ -152,7 +152,7 @@
 
                 <li>
                     <a href="{{ route('admin.pengguna.index') }}"
-                       class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
+                       class="sidebar-link {{ Route::currentRouteName() == 'admin.pengguna.index' ? 'active' : '' }} flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
                         <i class="fa-solid fa-users w-5 text-blue-600"></i>
                         <span class="font-medium">Manajemen User</span>
                     </a>
@@ -160,7 +160,7 @@
                 @endif
                 <li>
                     <a href="{{ route('admin.kategori.index') }}"
-                       class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
+                       class="sidebar-link {{ Route::currentRouteName() == 'admin.kategori.index' ? 'active' : '' }} flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
                         <i class="fa-solid fa-layer-group w-5 text-blue-600"></i>
                         <span class="font-medium">Kategori Buku</span>
                     </a>
@@ -168,22 +168,22 @@
 
                 <li>
                     <a href="{{ route('admin.buku.index') }}"
-                       class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
+                       class="sidebar-link {{ Route::currentRouteName() == 'admin.buku.index' ? 'active' : '' }} flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
                         <i class="fa-solid fa-book w-5 text-blue-600"></i>
                         <span class="font-medium">Data Buku</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('admin.peminjaman.index') }}"
-                       class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
+                       class="sidebar-link {{ Route::currentRouteName() == 'admin.peminjaman.index' ? 'active' : '' }} flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
                         <i class="fa-solid fa-right-left w-5 text-blue-600"></i>
                         <span class="font-medium">Peminjaman &amp; Pengembalian</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="#"
-                       class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
+                    <a href="{{ route('admin.pengembalian.index') }}"
+                       class="sidebar-link {{ Route::currentRouteName() == 'admin.pengembalian.index' ? 'active' : '' }} flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
                         <i class="fa-solid fa-file-lines w-5 text-blue-600"></i>
                         <span class="font-medium">Laporan Peminjaman</span>
                     </a>

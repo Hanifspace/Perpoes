@@ -226,7 +226,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($peminjaman as $index => $pinjam)
+                @forelse ($pengembalian as $index => $pinjam)
                 <tr>
                     <td class="td-no">{{ $index + 1 }}</td>
                     <td class="td-name">{{ $pinjam->user->name }}</td>

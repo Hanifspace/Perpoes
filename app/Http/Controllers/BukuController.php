@@ -78,7 +78,7 @@ class BukuController extends Controller
      */
     public function show(buku $buku)
     {
-         $buku->load('kategori');
+        $buku->load('kategori');
         return view('admin.buku.show', compact('buku'));
     }
 
