@@ -177,7 +177,7 @@
                     <a href="{{ route('admin.peminjaman.index') }}"
                        class="sidebar-link {{ Route::currentRouteName() == 'admin.peminjaman.index' ? 'active' : '' }} flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
                         <i class="fa-solid fa-right-left w-5 text-blue-600"></i>
-                        <span class="font-medium">Peminjaman &amp; Pengembalian</span>
+                        <span class="font-medium">Peminjaman</span>
                     </a>
                 </li>
 
@@ -185,7 +185,7 @@
                     <a href="{{ route('admin.pengembalian.index') }}"
                        class="sidebar-link {{ Route::currentRouteName() == 'admin.pengembalian.index' ? 'active' : '' }} flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:text-blue-700">
                         <i class="fa-solid fa-file-lines w-5 text-blue-600"></i>
-                        <span class="font-medium">Laporan Peminjaman</span>
+                        <span class="font-medium">Pengembalian</span>
                     </a>
                 </li>
 
@@ -232,7 +232,7 @@
                         <div class="text-xs font-semibold text-slate-900">
                             {{ auth()->user()->nama_lengkap ?? 'Administrator' }}
                         </div>
-                        <div class="text-xs text-slate-500">{{ auth()->user()->name ?? 'Admin' }}</div>
+                        <div class="text-xs text-slate-500">{{ auth()->user()->email ?? 'Admin' }}</div>
                     </div>
                     <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform" id="chevronIcon"></i>
                 </button>

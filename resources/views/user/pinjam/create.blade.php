@@ -30,13 +30,17 @@
             {{-- Tanggal Peminjaman --}}
             <div>
                 <label for="tanggal_peminjaman" class="block text-sm font-semibold text-slate-700">Tanggal Peminjaman</label>
-                <input type="date" id="tanggal_peminjaman" name="tanggal_peminjaman" class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                <input type="date" id="tanggal_peminjaman" name="tanggal_peminjaman" 
+                    class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm bg-slate-100 text-slate-500 cursor-not-allowed" 
+                    readonly required>
             </div>
 
             {{-- Tanggal Pengembalian --}}
             <div>
                 <label for="tanggal_pengembalian" class="block text-sm font-semibold text-slate-700">Tanggal Pengembalian</label>
-                <input type="date" id="tanggal_pengembalian" name="tanggal_pengembalian" class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                <input type="date" id="tanggal_pengembalian" name="tanggal_pengembalian" 
+                    class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" 
+                    required>
             </div>
 
             <input type="hidden" name="status" value="menunggu">
@@ -52,3 +56,19 @@
         </div>
     </form>
 </div>
+
+<script>
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const todayStr = `${yyyy}-${mm}-${dd}`;
+
+    const maxDate = new Date(today);
+    maxDate.setDate(maxDate.getDate() + 14);
+    const maxStr = `${maxDate.getFullYear()}-${String(maxDate.getMonth() + 1).padStart(2, '0')}-${String(maxDate.getDate()).padStart(2, '0')}`;
+
+    document.getElementById('tanggal_peminjaman').value = todayStr;
+    document.getElementById('tanggal_pengembalian').min = todayStr;
+    document.getElementById('tanggal_pengembalian').max = maxStr;
+</script>

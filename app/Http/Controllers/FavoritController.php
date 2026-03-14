@@ -35,16 +35,15 @@ class FavoritController extends Controller
     public function store($id)
     {
         $buku = Buku::findOrFail($id);
-
         $user = Auth::user();
+
         if ($user->favorit->contains($buku->id)) {
-            return back()->with('error', 'Buku sudah ada di favorit!');
+            $user->favorit()->detach($buku);
+            return back()->with('success', 'Buku dihapus dari favorit.');
         }
 
-        // Menambahkan buku ke favorit
         $user->favorit()->attach($buku);
-
-        return back()->with('success', 'Buku berhasil ditambahkan ke favorit!');
+        return back()->with('success', 'Buku ditambahkan ke favorit!');
     }
 
     /**
@@ -78,13 +77,7 @@ class FavoritController extends Controller
     {
         $buku = Buku::findOrFail($id);
         $user = Auth::user();
-
-        if ($user->favorit->contains($buku->id)) {
-            return back()->with('error', 'Buku tidak ada di favorit!');
-        }
-   
         $user->favorit()->detach($buku);
-
         return back()->with('success', 'Buku berhasil dihapus dari favorit!');
     }
 }

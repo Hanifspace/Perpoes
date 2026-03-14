@@ -31,6 +31,11 @@
                 @endif
             </form>
 
+            <a href="{{ route('admin.kategori.export', ['q' => request('q')]) }}"
+             class="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 text-sm">
+             Export PDF
+            </a>
+
             <a href="{{ route('admin.kategori.create') }}"
             class="px-4 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800 text-sm">
                 + Tambah
@@ -66,7 +71,7 @@
                 <tbody class="divide-y divide-slate-200">
                     @forelse ($kategoris as $kategori)
                     <tr class="hover:bg-slate-50">
-                        <td class="px-4 py-3 text-slate-600">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-3 text-slate-600">{{ $kategoris->firstItem() + $loop->index }}</td>
                         <td class="px-4 py-3 font-medium">{{ $kategori->nama_kategori }}</td>
 
                         <td class="px-4 py-3">
@@ -99,10 +104,11 @@
                     </tr>
                     @endforelse
                 </tbody>
-
             </table>
         </div>
     </div>
-
+    <div class="mt-4">
+        {{ $kategoris->links() }}
+    </div>
 </div>
 @endsection

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource.   
      */
 
     public function getPetugasCount()
@@ -31,7 +31,9 @@ class UserController extends Controller
                         ->orWhere('alamat', 'like', "%{$q}%");
                 });
             })
-            ->get();
+            ->orderBy('nama_lengkap')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('admin.petugas.index', compact('nama'));
     }
@@ -138,6 +140,7 @@ class UserController extends Controller
                     ->orWhere('name', 'like', "%{$q}%")
                     ->orWhere('email', 'like', "%{$q}%");
             })
+            ->where('role', 'petugas')
             ->orderBy('id', 'desc')
             ->get();
 

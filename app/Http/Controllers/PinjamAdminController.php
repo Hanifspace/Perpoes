@@ -12,9 +12,26 @@ class PinjamAdminController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $peminjaman = Pinjam::with(['user', 'buku'])->latest()->get();
+        $q = $request->query('q');
+
+        $peminjaman = Pinjam::with(['user', 'buku'])
+            ->where('status', 'dipinjam')
+            ->when($q, function ($query) use ($q) {
+                $query->whereHas('user', function ($q2) use ($q) {
+                    $q2->where('name', 'like', "%{$q}%");
+                })
+                ->orWhereHas('buku', function ($q3) use ($q) {
+                    $q3->where('judul', 'like', "%{$q}%")
+                    ->orWhere('kode_buku', 'like', "%{$q}%");
+                });
+            })
+            ->whereIn('status', ['menunggu', 'dipinjam', 'menunggu_pengembalian'])
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
         return view('admin.peminjaman.index', compact('peminjaman'));
     }
 
@@ -30,10 +47,71 @@ class PinjamAdminController extends Controller
         return $pdf->stream($filename);
     }
 
-    public function pengembalian()
+    public function pengembalian(Request $request)
     {
-        $pengembalian = Pinjam::with(['user', 'buku'])->latest()->get();
+        $q = $request->query('q');
+
+        $pengembalian = Pinjam::with(['user', 'buku'])
+            ->where('status', 'dikembalikan') // filter khusus pengembalian
+            ->when($q, function ($query) use ($q) {
+                $query->whereHas('user', function($q2) use ($q) {
+                    $q2->where('name', 'like', "%{$q}%");
+                })->orWhereHas('buku', function($q3) use ($q) {
+                    $q3->where('judul', 'like', "%{$q}%")
+                    ->orWhere('kode_buku', 'like', "%{$q}%");
+                });
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
         return view('admin.pengembalian.index', compact('pengembalian'));
+    }
+
+        public function exportPdf(Request $request)
+    {
+        $q = $request->query('q');
+
+        $pengembalian = Pinjam::with(['user','buku'])
+            ->where('status', 'dikembalikan')
+            ->when($q, function($query) use ($q) {
+                $query->whereHas('user', function($q2) use ($q){
+                    $q2->where('name','like',"%{$q}%");
+                })->orWhereHas('buku', function($q3) use ($q){
+                    $q3->where('judul','like',"%{$q}%")
+                    ->orWhere('kode_buku','like',"%{$q}%");
+                });
+            })
+            ->latest()
+            ->get();
+
+        $pdf = Pdf::loadView('admin.pengembalian.export', compact('pengembalian'))
+                ->setPaper('A4','portrait');
+
+        return $pdf->download('laporan-pengembalian.pdf');
+    }
+
+        public function exportPdf2(Request $request)
+    {
+        $q = $request->query('q');
+
+        $peminjaman = Pinjam::with(['user','buku'])
+            ->where('status', 'dipinjam')
+            ->when($q, function($query) use ($q) {
+                $query->whereHas('user', function($q2) use ($q){
+                    $q2->where('name','like',"%{$q}%");
+                })->orWhereHas('buku', function($q3) use ($q){
+                    $q3->where('judul','like',"%{$q}%")
+                    ->orWhere('kode_buku','like',"%{$q}%");
+                });
+            })
+            ->latest()
+            ->get();
+
+        $pdf = Pdf::loadView('admin.peminjaman.export', compact('peminjaman'))
+                ->setPaper('A4','portrait');
+
+        return $pdf->download('laporan-peminjaman.pdf');
     }
 
     
@@ -76,20 +154,23 @@ class PinjamAdminController extends Controller
     {
         $pinjam = Pinjam::findOrFail($id);
         $stok = Buku::findOrFail($pinjam->buku_id)->stok;
-
-        $validStatus = ['dipinjam', 'dikembalikan', 'ditolak'];
-
+        $validStatus = ['dipinjam', 'dikembalikan', 'ditolak', 'ditolak_pengembalian'];
         if (in_array($request->status, $validStatus)) {
-            $pinjam->status = $request->status; // simpan lowercase, konsisten
+            if ($request->status == 'ditolak_pengembalian') {
+                $pinjam->status = 'dipinjam';
+            } else {
+                $pinjam->status = $request->status;
+            }
+
             if ($request->status == 'dipinjam' && $stok > 0) {
                 $pinjam->buku->decrement('stok');
             } elseif ($request->status == 'dikembalikan') {
                 $pinjam->buku->increment('stok');
+                $pinjam->tanggal_pengembalian = now()->toDateString();
             }
-             $pinjam->save();
 
+            $pinjam->save();
         }
-
         return redirect()->route('admin.peminjaman.index');
     }
 

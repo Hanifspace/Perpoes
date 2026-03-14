@@ -31,8 +31,13 @@
                 @endif
             </form>
 
+            <a href="{{ route('admin.buku.export', ['q' => request('q')]) }}"
+               class="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 text-sm">
+                Export PDF
+            </a>
+
             <a href="{{ route('admin.buku.create') }}"
-            class="px-4 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800 text-sm">
+               class="px-4 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800 text-sm">
                 + Tambah
             </a>
         </div>
@@ -69,7 +74,7 @@
                     <tr class="hover:bg-slate-50">
                         {{-- No --}}
                         <td class="px-4 py-3 text-slate-600">
-                            {{ $loop->iteration }}
+                            {{ $bukus->firstItem() + $loop->index }}
                         </td>
 
                         {{-- Cover --}}
@@ -92,7 +97,7 @@
                         <td class="px-4 py-3">{{ $buku->penerbit }}</td>
                         <td class="px-4 py-3">{{ $buku->tahun_terbit }}</td>
                         <td class="px-4 py-3">{{ $buku->stok }}</td>
-                        
+
                         <td class="px-4 py-3">
                             <div class="flex justify-end gap-2">
                                 <a href="{{ route('admin.buku.show', $buku->id) }}"
@@ -128,6 +133,10 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <div class="mt-4">
+        {{ $bukus->links() }}
     </div>
 </div>
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\buku;
 use App\Models\Kategori;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,10 +29,12 @@ class BukuController extends Controller
                     $sub->where('judul', 'like', "%{$q}%")
                         ->orWhere('penulis', 'like', "%{$q}%")
                         ->orWhere('penerbit', 'like', "%{$q}%")
-                        ->orWhere('kode_buku', 'like', "%{$q}%"); 
+                        ->orWhere('kode_buku', 'like', "%{$q}%");
                 });
             })
-            ->get();
+            ->orderBy('judul')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('admin.buku.index', compact('bukus'));
     }
@@ -135,5 +138,24 @@ class BukuController extends Controller
         return redirect()
             ->route('admin.buku.index')
             ->with('success', 'Buku berhasil dihapus.');
+    }
+
+        public function exportPdf(Request $request)
+    {
+        $query = Buku::with('kategori');
+
+        if ($request->q) {
+            $query->where(function ($q) use ($request) {
+                $q->where('judul', 'like', '%' . $request->q . '%')
+                ->orWhere('penulis', 'like', '%' . $request->q . '%')
+                ->orWhere('penerbit', 'like', '%' . $request->q . '%');
+            });
+        }
+
+        $bukus = $query->get();
+
+        $pdf = Pdf::loadView('admin.buku.export', compact('bukus'));
+
+        return $pdf->download('data-buku.pdf');
     }
 }

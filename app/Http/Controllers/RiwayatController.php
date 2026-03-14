@@ -8,6 +8,7 @@ use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 
@@ -40,6 +41,19 @@ class RiwayatController extends Controller
             ->setPaper('A4', 'portrait');
 
         return $pdf->stream('bukti-peminjaman-' . $pinjam->id . '.pdf');
+    }
+
+    public function ajukanPengembalian(string $id)
+    {
+        $pinjam = pinjam::where('user_id', Auth::id())->findOrFail($id);
+
+        if ($pinjam->status === 'dipinjam') {
+            DB::table('pinjam')
+                ->where('id', $pinjam->id)
+                ->update(['status' => 'menunggu_pengembalian']);
+        }
+
+        return redirect()->route('user.riwayat.index');
     }
 
     /**

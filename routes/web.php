@@ -42,11 +42,15 @@ Route::get('/admin/petugas/export/pdf', [UserController::class, 'exportPdf'])
 //admin - pengguna
 Route::get('/manajemen-user', [PenggunaController::class, 'index'])->name('admin.pengguna.index');
 Route::delete('/manajemen-user/{id}', [PenggunaController::class, 'destroy'])->name('admin.pengguna.destroy');
+Route::get('/admin/pengguna/export/pdf', [PenggunaController::class, 'exportPdf'])
+    ->name('admin.pengguna.export');
 
 //admin -kategori
 Route::get('/kategori', [KategoriController::class, 'index'])->name('admin.kategori.index');
 Route::get('/kategori/tambah', [KategoriController::class, 'create'])->name('admin.kategori.create');
 Route::post('/kategori', [KategoriController::class, 'store'])->name('admin.kategori.store');
+Route::get('/admin/kategori/export-pdf', [KategoriController::class, 'exportPdf'])
+    ->name('admin.kategori.export');
 
 Route::get('/kategori/{kategori}/edit', [KategoriController::class, 'edit'])->name('admin.kategori.edit');
 Route::put('/kategori/{kategori}', [KategoriController::class, 'update'])->name('admin.kategori.update');
@@ -56,6 +60,8 @@ Route::delete('/kategori/{kategori}', [KategoriController::class, 'destroy'])->n
 Route::get('/buku', [BukuController::class, 'index'])->name('admin.buku.index');
 Route::get('/buku/tambah', [BukuController::class, 'create'])->name('admin.buku.create');
 Route::post('/buku', [BukuController::class, 'store'])->name('admin.buku.store');
+Route::get('/admin/buku/export-pdf', [BukuController::class, 'exportPdf'])
+    ->name('admin.buku.export');
 
 Route::get('/buku/{buku}', [BukuController::class, 'show'])->name('admin.buku.show');
 Route::get('/buku/{buku}/edit', [BukuController::class, 'edit'])->name('admin.buku.edit');
@@ -68,11 +74,13 @@ Route::get('/laporan{id}', [LaporanAdminController::class, 'index'])->name('admi
 Route::put('/peminjaman/{id}', [PinjamAdminController::class, 'update'])->name('peminjaman.update');
 Route::get('/peminjaman/{id}/laporan', [PinjamAdminController::class, 'downloadLaporan'])
 ->name('peminjaman.laporan');
+Route::get('/admin/peminjaman/export', [PinjamAdminController::class, 'exportPdf2'])
+    ->name('admin.peminjaman.export');
 
 //admin -pengembalian
 Route::get('/pengembalian', [PinjamAdminController::class, 'pengembalian'])->name('admin.pengembalian.index');
-
-
+Route::get('/admin/pengembalian/export', [PinjamAdminController::class, 'exportPdf'])
+    ->name('admin.pengembalian.export');
 });
 
 //petugas
@@ -82,6 +90,7 @@ Route::get('/petugas', [UserController::class, 'index'])->name('petugas.dashboar
 Route::get('/pengguna', [PenggunaController::class, 'index2'])->name('user.dashboard');
 Route::get('/riwayat', [PenggunaController::class, 'index3'])->name('user.riwayat.index');
 Route::get('/user/riwayat/{id}/bukti-peminjaman', [RiwayatController::class, 'buktiPeminjaman'])->name('user.riwayat.bukti.peminjaman');
+Route::put('/riwayat/{id}/ajukan-pengembalian', [RiwayatController::class, 'ajukanPengembalian'])->name('user.riwayat.ajukan.pengembalian');
 Route::get('/pinjam/create/{buku_id}', [PinjamUserController::class, 'create'])->name('user.pinjam.create');
 Route::post('/pinjam', [PinjamUserController::class, 'store'])->name('user.pinjam.store');
 Route::get('/detail/{id}', [PinjamUserController::class, 'show'])->name('user.pinjam.show');

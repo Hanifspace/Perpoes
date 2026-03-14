@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku; 
 use App\Models\pinjam;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PinjamUserController extends Controller
@@ -13,7 +14,11 @@ class PinjamUserController extends Controller
      */
     public function index()
     {
-        
+        $bukus = Buku::with('kategori')->get();
+        $favoritIds = Auth::check() 
+            ? Auth::user()->favorit->pluck('id')->toArray() 
+            : [];
+        return view('user.pinjam.index', compact('bukus', 'favoritIds'));
     }
 
     /**
@@ -30,6 +35,17 @@ class PinjamUserController extends Controller
      */
         public function store(Request $request)
         {       
+
+        $sudahMeminjam = pinjam::where('user_id', Auth::id())
+            ->whereIn('status', ['menunggu', 'dipinjam', 'menunggu_pengembalian'])
+            ->exists();
+
+        if ($sudahMeminjam) {
+            return redirect()->back()->withErrors([
+                'buku_id' => 'Kamu masih memiliki buku yang sedang dipinjam. Kembalikan dulu sebelum meminjam buku lain.'
+            ]);
+        }
+
         $request->validate([
             'buku_id' => 'required|exists:bukus,id',
             'tanggal_peminjaman' => 'required|date',

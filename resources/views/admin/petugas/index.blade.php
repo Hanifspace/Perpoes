@@ -68,7 +68,9 @@
                 <tbody class="divide-y divide-slate-200">
                     @forelse ($nama as $user)
                     <tr class="hover:bg-slate-50">
-                        <td class="px-4 py-3 text-slate-600">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-3 text-slate-600">
+                            {{ $nama->firstItem() + $loop->index }}
+                        </td>
                         <td class="px-4 py-3 font-medium">{{ $user->nama_lengkap }}</td>
                         <td class="px-4 py-3">{{ $user->name }}</td>
                         <td class="px-4 py-3">{{ $user->email }}</td>
@@ -104,6 +106,10 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <div class="mt-4">
+        {{ $nama->links() }}
     </div>
 </div>
 @endsection

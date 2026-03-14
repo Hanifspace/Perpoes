@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\kategori;
 use Illuminate\Http\Request;
 
@@ -17,13 +18,15 @@ class KategoriController extends Controller
     
     public function index(Request $request)
     {
-        $q = $request->query('q');
+        $q = $request->query('q'); 
 
-        $kategoris = Kategori::query()
-            ->when($q, function ($query) use ($q) {
+        $kategoris = \App\Models\Kategori::query()
+            ->when($q, function($query) use ($q) {
                 $query->where('nama_kategori', 'like', "%{$q}%");
             })
-            ->get();
+            ->orderBy('nama_kategori')
+            ->paginate(10) 
+            ->withQueryString(); 
 
         return view('admin.kategori.index', compact('kategoris'));
     }
@@ -41,7 +44,7 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-                $validated = $request->validate([
+            $validated = $request->validate([
             'nama_kategori' => 'required|string|max:255',
         ]);
 
@@ -94,4 +97,20 @@ class KategoriController extends Controller
             ->route('admin.kategori.index')
             ->with('success', 'Kategori berhasil dihapus.');
     }
+
+    public function exportPdf(Request $request)
+{
+    $query = Kategori::query();
+
+    if ($request->q) {
+        $query->where('nama_kategori', 'like', '%' . $request->q . '%');
+    }
+
+    $kategoris = $query->get();
+
+    $pdf = Pdf::loadView('admin.kategori.export', compact('kategoris'));
+
+    return $pdf->download('data-kategori.pdf');
+}
+
 }

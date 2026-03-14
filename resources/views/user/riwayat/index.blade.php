@@ -89,12 +89,22 @@
                 @if($buku->status == 'dipinjam')
                 <a href="{{ route('user.riwayat.bukti.peminjaman', $buku->id) }}" target="_blank"
                     class="btn-outline inline-block">Bukti Peminjaman</a>
-                    <button class="btn-primary">Ajukan Pengembalian</button>
+                    
+                    <form action="{{ route('user.riwayat.ajukan.pengembalian', $buku->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="btn-primary">Ajukan Pengembalian</button>
+                    </form>
+                    @endif
+                    
+                    @if($buku->status == 'menunggu_pengembalian')
+                    <span class="btn-outline" style="cursor:default;">Menunggu Konfirmasi...</span>
                 @endif
-                
+
                 @if($buku->status == 'dikembalikan')
-                <a href="{{ route('user.riwayat.bukti.peminjaman', $buku->id) }}" target="_blank"
-                    class="btn-outline inline-block">Bukti Pengembalian</a>
+                <a href="#" target="_blank"
+                    class="btn-outline inline-block">Beri Rating</a>
+                
                 @endif
             </div>
         </div>

@@ -1,12 +1,30 @@
 @include('nav')
 
 <div class="w-full px-4 py-6">
-  <div class="flex items-end justify-between gap-4 mb-6">
+<div class="flex items-center justify-between gap-4 mb-6">
     <div>
-      <h1 class="text-2xl font-semibold text-slate-900">Katalog Buku</h1>
-      <p class="text-slate-500 text-sm">Pilih buku, lihat detail, atau pinjam.</p>
+        <h1 class="text-2xl font-semibold text-slate-900">Katalog Buku</h1>
+        <p class="text-slate-500 text-sm">Pilih buku, lihat detail, atau pinjam.</p>
     </div>
-  </div>
+
+    {{-- Search Bar --}}
+    <form method="GET" action="{{ route('user.pinjam.index') }}">
+        <div class="relative w-72">
+            <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                <i class="fas fa-search text-sm"></i>
+            </span>
+            <input type="text" name="search" value="{{ request('search') }}"
+                   placeholder="Cari judul atau penulis..."
+                   class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-9 pr-4 text-sm text-slate-700 shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100">
+            @if(request('search'))
+                <a href="{{ route('user.pinjam.index') }}"
+                   class="absolute inset-y-0 right-3 flex items-center text-slate-400 hover:text-slate-600">
+                    <i class="fas fa-times text-sm"></i>
+                </a>
+            @endif
+        </div>
+    </form>
+</div>
 
   @if (session('success'))
     <div class="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-2 text-green-700 text-sm">
@@ -39,19 +57,17 @@
             {{ $stok > 0 ? $stok : '0' }}
           </span>
 
-          {{-- Tombol Favorit --}}
-          <form action="{{ route('user.favorit.store', $buku->id) }}" method="POST"
-                class="absolute right-2 top-2"
-                onsubmit="handleFavorit(event, this, {{ $buku->id }})">
+        {{-- Tombol Favorit --}}
+        <form action="{{ route('user.favorit.store', $buku->id) }}" method="POST"
+              class="absolute right-2 top-2">
             @csrf
             <button type="submit"
-                    id="fav-btn-{{ $buku->id }}"
                     class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/90 shadow transition hover:scale-110 active:scale-95"
                     title="Tambah ke favorit">
-              <i class="fas fa-heart text-sm transition-colors duration-200"
-                 id="fav-icon-{{ $buku->id }}"></i>
+                <i class="fas fa-heart text-sm transition-colors duration-200
+                    {{ in_array($buku->id, $favoritIds) ? 'text-rose-500' : 'text-slate-300' }}"></i>
             </button>
-          </form>
+        </form>
 
           {{-- Gradient bottom overlay --}}
           <div class="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/40 to-transparent"></div>

@@ -66,7 +66,6 @@
     }
     .td-date { color: #6b7280; font-size: 0.82rem; }
 
-    /* ─── STATUS BADGE ─── */
     .status-badge {
         display: inline-flex;
         align-items: center;
@@ -77,12 +76,12 @@
         font-weight: 600;
         white-space: nowrap;
     }
-    .badge-menunggu     { background: #fff7ed; color: #c2410c; border: 1.5px solid #fed7aa; }
-    .badge-dipinjam     { background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; }
-    .badge-dikembalikan { background: #f0fdf4; color: #15803d; border: 1.5px solid #bbf7d0; }
-    .badge-ditolak      { background: #fff1f2; color: #be123c; border: 1.5px solid #fecdd3; }
+    .badge-menunggu          { background: #fff7ed; color: #c2410c; border: 1.5px solid #fed7aa; }
+    .badge-menunggu-kembali  { background: #faf5ff; color: #7e22ce; border: 1.5px solid #e9d5ff; }
+    .badge-dipinjam          { background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; }
+    .badge-dikembalikan      { background: #f0fdf4; color: #15803d; border: 1.5px solid #bbf7d0; }
+    .badge-ditolak           { background: #fff1f2; color: #be123c; border: 1.5px solid #fecdd3; }
 
-    /* ─── TOMBOL APPROVE / REJECT ─── */
     .aksi-menunggu { display: flex; align-items: center; gap: 0.5rem; }
 
     .btn-approve, .btn-reject {
@@ -124,7 +123,6 @@
         box-shadow: 0 4px 12px rgba(220,38,38,0.35);
     }
 
-    /* ─── DROPDOWN STATUS ─── */
     .status-form { display: flex; align-items: center; gap: 0.5rem; }
 
     .status-select-wrapper { position: relative; display: inline-block; }
@@ -155,14 +153,9 @@
         pointer-events: none;
     }
 
-    /* Warna per nilai dropdown */
     .status-select.status-dipinjam,
     .status-select-wrapper.status-dipinjam::after { color: #1d4ed8; }
     .status-select.status-dipinjam { background: #eff6ff; border: 1.5px solid #bfdbfe; }
-
-    .status-select.status-dikembalikan,
-    .status-select-wrapper.status-dikembalikan::after { color: #15803d; }
-    .status-select.status-dikembalikan { background: #f0fdf4; border: 1.5px solid #bbf7d0; }
 
     .status-select.status-ditolak,
     .status-select-wrapper.status-ditolak::after { color: #be123c; }
@@ -207,9 +200,29 @@
 </style>
 
 <div class="peminjaman-wrapper">
-    <div class="peminjaman-header">
-        <h2>Data Peminjaman Buku</h2>
-        <p>Kelola dan perbarui status peminjaman buku perpustakaan</p>
+    <!-- Header + search + export PDF -->
+    <div class="flex items-center justify-between mb-3">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-900">Data Peminjaman Buku</h2>
+            <p class="text-sm text-slate-600">Kelola dan perbarui status peminjaman buku perpustakaan</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <!-- Search form -->
+            <form action="{{ route('admin.peminjaman.index') }}" method="GET" class="flex items-center gap-2">
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama peminjam/judul buku/kode buku..."
+                    class="w-64 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-300"/>
+                <button type="submit" class="px-3 py-2 rounded-lg bg-slate-200 text-slate-800 hover:bg-slate-300 text-sm">Cari</button>
+                @if(request('q'))
+                    <a href="{{ route('admin.peminjaman.index') }}" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm">Reset</a>
+                @endif
+            </form>
+
+            <!-- Export PDF -->
+            <a href="{{ route('admin.peminjaman.export', ['q'=>request('q')]) }}" class="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 text-sm">
+                Export PDF
+            </a>
+        </div>
     </div>
 
     <div class="table-card">
@@ -235,7 +248,6 @@
                     <td class="td-date">{{ \Carbon\Carbon::parse($pinjam->tanggal_peminjaman)->format('d M Y') }}</td>
                     <td class="td-date">{{ \Carbon\Carbon::parse($pinjam->tanggal_pengembalian)->format('d M Y') }}</td>
 
-                    {{-- Kolom Status & Aksi (digabung) --}}
                     @php $status = strtolower($pinjam->status); @endphp
                     <td>
                         @if($status === 'menunggu')
@@ -265,8 +277,34 @@
                                 </form>
                             </div>
 
+                        @elseif($status === 'menunggu_pengembalian')
+                            <div class="aksi-menunggu">
+                                <span class="status-badge badge-menunggu-kembali">🔄 Minta Kembali</span>
+
+                                <form action="{{ route('peminjaman.update', $pinjam->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="status" value="dikembalikan">
+                                    <input type="hidden" name="user_id" value="{{ $pinjam->user->id }}">
+                                    <input type="hidden" name="buku_id" value="{{ $pinjam->buku->id }}">
+                                    <input type="hidden" name="tanggal_peminjaman" value="{{ $pinjam->tanggal_peminjaman }}">
+                                    <input type="hidden" name="tanggal_pengembalian" value="{{ $pinjam->tanggal_pengembalian }}">
+                                    <button type="submit" class="btn-approve" title="Konfirmasi Dikembalikan">✓</button>
+                                </form>
+
+                                <form action="{{ route('peminjaman.update', $pinjam->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="status" value="ditolak_pengembalian">
+                                    <input type="hidden" name="user_id" value="{{ $pinjam->user->id }}">
+                                    <input type="hidden" name="buku_id" value="{{ $pinjam->buku->id }}">
+                                    <input type="hidden" name="tanggal_peminjaman" value="{{ $pinjam->tanggal_peminjaman }}">
+                                    <input type="hidden" name="tanggal_pengembalian" value="{{ $pinjam->tanggal_pengembalian }}">
+                                    <button type="submit" class="btn-reject" title="Tolak Pengembalian">✕</button>
+                                </form>
+                            </div>
+
                         @elseif($status === 'dikembalikan')
-                            {{-- Status final: badge + tombol lihat laporan --}}
                             <div style="display:flex; align-items:center; gap:0.5rem;">
                                 <span class="status-badge badge-dikembalikan">✅ Dikembalikan</span>
                                 <a href="{{ route('peminjaman.laporan', $pinjam->id) }}" class="btn-laporan">
@@ -285,13 +323,9 @@
 
                                 <div class="status-select-wrapper status-{{ $status }}">
                                     <select name="status" class="status-select status-{{ $status }}" onchange="updateSelectStyle(this)">
-                                        <option value="dipinjam"     {{ $status === 'dipinjam'     ? 'selected' : '' }}>📖 Dipinjam</option>
-                                        <option value="dikembalikan" {{ $status === 'dikembalikan' ? 'selected' : '' }}>✅ Dikembalikan</option>
-                                        <option value="ditolak"      {{ $status === 'ditolak'      ? 'selected' : '' }}>❌ Ditolak</option>
+                                        <option value="dipinjam" {{ $status === 'dipinjam' ? 'selected' : '' }}>📖 Dipinjam</option>
                                     </select>
                                 </div>
-
-                                <button type="submit" class="btn-update">Simpan</button>
                             </form>
                         @endif
                     </td>
@@ -304,10 +338,12 @@
             </tbody>
         </table>
     </div>
+        <div class="mt-4">
+        {{ $peminjaman->links() }}
+    </div>
 </div>
 
 <script>
-    // Update warna dropdown secara live saat pilihan berubah
     function updateSelectStyle(select) {
         const wrapper = select.parentElement;
         const allClasses = ['status-dipinjam', 'status-dikembalikan', 'status-ditolak', 'status-menunggu'];

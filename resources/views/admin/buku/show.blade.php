@@ -100,9 +100,7 @@
                         Diupdate: <span class="text-slate-700">{{ $buku->updated_at?->format('d M Y,') }}</span>
                     </p>
                 </div>
-
             </div>
-
         </div>
     </div>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\User;
 
 class PenggunaController extends Controller
@@ -30,7 +31,9 @@ class PenggunaController extends Controller
                         ->orWhere('alamat', 'like', "%{$q}%");
                 });
             })
-            ->get();
+            ->orderBy('nama_lengkap')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('admin.pengguna.index', compact('nama'));
     }
@@ -87,10 +90,32 @@ class PenggunaController extends Controller
      */
     public function destroy(string $id)
     {
-          $user = User::where('role', 'user')->findOrFail($id);
+        $user = User::where('role', 'user')->findOrFail($id);
         $user->delete();
 
         return redirect()->route('admin.pengguna.index')
             ->with('success', 'User berhasil dihapus.');
+    }
+
+        public function exportPdf(Request $request)
+    {
+        $q = $request->q;
+
+        $nama = User::query()
+            ->when($q, function ($query) use ($q) {
+                $query->where('nama_lengkap', 'like', "%{$q}%")
+                    ->orWhere('name', 'like', "%{$q}%")
+                    ->orWhere('email', 'like', "%{$q}%");
+            })
+            ->where('role', 'user')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $pdf = Pdf::loadView('admin.pengguna.export', [
+            'nama' => $nama,
+            'q'    => $q,
+        ])->setPaper('A4', 'landscape'); // biar muat tabel lebar
+
+        return $pdf->download('daftar-pengguna.pdf');
     }
 }

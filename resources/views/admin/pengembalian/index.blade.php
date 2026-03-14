@@ -206,12 +206,44 @@
     .empty-state { text-align: center; padding: 3rem; color: #9ca3af; }
 </style>
 
-<div class="peminjaman-wrapper">
-    <div class="peminjaman-header">
-        <h2>Data Peminjaman Buku</h2>
-        <p>Kelola dan perbarui status peminjaman buku perpustakaan</p>
-    </div>
+    <div class="peminjaman-wrapper">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900">Data Pengembalian Buku</h2>
+                <p class="text-sm text-slate-600">Kelola dan perbarui status pengembalian buku perpustakaan</p>
+            </div>            
+                <div class="flex items-center gap-2">
+                    <!-- Form search -->
+                    <form action="{{ route('admin.pengembalian.index') }}" method="GET" class="flex items-center gap-2">
+                        <input
+                            type="text"
+                            name="q"
+                            value="{{ request('q') }}"
+                            placeholder="Cari nama peminjam/judul buku/kode buku..."
+                            class="w-64 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-300"
+                        />
+                        <button
+                            type="submit"
+                            class="px-3 py-2 rounded-lg bg-slate-200 text-slate-800 hover:bg-slate-300 text-sm"
+                        >
+                            Cari
+                        </button>
+                        @if(request('q'))
+                        <a
+                            href="{{ route('admin.pengembalian.index') }}"
+                            class="px-3 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm"
+                        >
+                            Reset
+                        </a>
+                        @endif
+                    </form>
 
+                    <a href="{{ route('admin.pengembalian.export', ['q' => request('q')]) }}"
+                    class="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 text-sm">
+                    Export PDF
+                    </a>
+                </div>
+            </div>
     <div class="table-card">
         <table class="peminjaman-table">
             <thead>
@@ -298,11 +330,14 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="empty-state">Belum ada data peminjaman.</td>
+                    <td colspan="7" class="empty-state">Belum ada data Pengembalian.</td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
+    </div>
+        <div class="mt-4">
+        {{ $pengembalian->links() }}
     </div>
 </div>
 

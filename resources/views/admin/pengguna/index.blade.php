@@ -23,15 +23,26 @@
                 </button>
 
                 @if(request('q'))
-                    <a
-                        href="{{ route('admin.pengguna.index') }}"
+                    <a href="{{ route('admin.pengguna.index') }}"
                         class="px-3 py-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm">
                         Reset
                     </a>
                 @endif
             </form>
+
+            <a href="{{ route('admin.pengguna.export', ['q' => request('q')]) }}"
+                class="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 text-sm">
+                Export PDF
+            </a>
         </div>
     </div>
+
+    {{-- Flash Message --}}
+    @if (session('success'))
+        <div class="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-2 text-green-700 text-sm">
+            {{ session('success') }}
+        </div>
+    @endif
 
     {{-- Table --}}
     <div class="bg-white rounded-xl shadow-sm ring-1 ring-slate-200">
@@ -52,7 +63,7 @@
                     @forelse ($nama as $user)
                     <tr class="hover:bg-slate-50">
                         <td class="px-4 py-3 text-slate-600">
-                            {{ $loop->iteration }}
+                            {{ $nama->firstItem() + $loop->index }}
                         </td>
                         <td class="px-4 py-3 font-medium">{{ $user->nama_lengkap }}</td>
                         <td class="px-4 py-3">{{ $user->name }}</td>
@@ -84,6 +95,8 @@
             </table>
         </div>
     </div>
-
+    <div class="mt-4">
+        {{ $nama->links() }}
+    </div>
 </div>
 @endsection

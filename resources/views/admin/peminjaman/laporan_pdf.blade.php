@@ -66,7 +66,11 @@
         <table>
             <tr>
                 <td class="label">Nama Peminjam</td>
-                <td>: {{ $pinjam->user->name }}</td>
+                <td>: {{ $pinjam->user->nama_lengkap }}</td>
+            </tr>
+            <tr>
+                <td class="label">Alamat Peminjam</td>
+                <td>: {{ $pinjam->user->alamat }}</td>
             </tr>
             <tr>
                 <td class="label">Judul Buku</td>
