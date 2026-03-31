@@ -16,21 +16,19 @@ class PinjamAdminController extends Controller
     {
         $q = $request->query('q');
 
-        $peminjaman = Pinjam::with(['user', 'buku'])
-            ->where('status', 'dipinjam')
-            ->when($q, function ($query) use ($q) {
-                $query->whereHas('user', function ($q2) use ($q) {
-                    $q2->where('name', 'like', "%{$q}%");
-                })
-                ->orWhereHas('buku', function ($q3) use ($q) {
-                    $q3->where('judul', 'like', "%{$q}%")
-                    ->orWhere('kode_buku', 'like', "%{$q}%");
-                });
+    $peminjaman = Pinjam::with(['user', 'buku'])
+        ->whereIn('status', ['menunggu', 'dipinjam', 'menunggu_pengembalian', 'ditolak'])
+        ->when($q, function ($query) use ($q) {
+            $query->whereHas('user', function ($q2) use ($q) {
+                $q2->where('name', 'like', "%{$q}%");
             })
-            ->whereIn('status', ['menunggu', 'dipinjam', 'menunggu_pengembalian'])
-            ->latest()
-            ->paginate(10)
-            ->withQueryString();
+            ->orWhereHas('buku', function ($q3) use ($q) {
+                $q3->where('judul', 'like', "%{$q}%")
+                ->orWhere('kode_buku', 'like', "%{$q}%");
+            });
+        })
+        ->latest()
+        ->get();
 
         return view('admin.peminjaman.index', compact('peminjaman'));
     }
@@ -62,8 +60,7 @@ class PinjamAdminController extends Controller
                 });
             })
             ->latest()
-            ->paginate(10)
-            ->withQueryString();
+            ->get();
 
         return view('admin.pengembalian.index', compact('pengembalian'));
     }
@@ -176,9 +173,13 @@ class PinjamAdminController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+        */
+    public function destroy($id)
     {
-        //
+        $pinjam = Pinjam::findOrFail($id);
+        $pinjam->delete();
+
+        return redirect()->route('admin.peminjaman.index')
+                        ->with('success', 'Data peminjaman berhasil dihapus.');
     }
 }

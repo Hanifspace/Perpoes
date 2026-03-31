@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProfileController;
+// use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BukuController;
@@ -13,11 +13,13 @@ use App\Http\Controllers\LaporanAdminController;
 use App\Http\Controllers\DataDiriController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\FavoritController;
+use App\Http\Controllers\RatingController;
+use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::get('/ahay', function () {
     return view('sidebar');
@@ -26,7 +28,7 @@ Route::get('/ahay', function () {
 Route::middleware(['auth', 'role:admin|petugas'])->group(function () {
 
 //dashboard masing masing role
-Route::get('/DashboardAhay', [AdminController::class, 'index'])->name('admin.dashboard'); 
+Route::get('/Dashboard', [AdminController::class, 'index'])->name('admin.dashboard'); 
 
 
 //admin -petugas
@@ -72,8 +74,10 @@ Route::delete('/buku/{buku}', [BukuController::class, 'destroy'])->name('admin.b
 Route::get('/peminjaman', [PinjamAdminController::class, 'index'])->name('admin.peminjaman.index');
 Route::get('/laporan{id}', [LaporanAdminController::class, 'index'])->name('admin.laporan.index');
 Route::put('/peminjaman/{id}', [PinjamAdminController::class, 'update'])->name('peminjaman.update');
-Route::get('/peminjaman/{id}/laporan', [PinjamAdminController::class, 'downloadLaporan'])
+Route::get('/pengembalian/{id}/laporan', [PinjamAdminController::class, 'downloadLaporan'])
 ->name('peminjaman.laporan');
+Route::delete('/peminjaman/{id}', [PinjamAdminController::class, 'destroy'])
+     ->name('pinjam.destroy');
 Route::get('/admin/peminjaman/export', [PinjamAdminController::class, 'exportPdf2'])
     ->name('admin.peminjaman.export');
 
@@ -81,6 +85,8 @@ Route::get('/admin/peminjaman/export', [PinjamAdminController::class, 'exportPdf
 Route::get('/pengembalian', [PinjamAdminController::class, 'pengembalian'])->name('admin.pengembalian.index');
 Route::get('/admin/pengembalian/export', [PinjamAdminController::class, 'exportPdf'])
     ->name('admin.pengembalian.export');
+
+
 });
 
 //petugas
@@ -96,6 +102,12 @@ Route::post('/pinjam', [PinjamUserController::class, 'store'])->name('user.pinja
 Route::get('/detail/{id}', [PinjamUserController::class, 'show'])->name('user.pinjam.show');
 Route::get('/katalog', [KatalogController::class, 'index'])->name('user.pinjam.index');
 Route::get('/favorit', [FavoritController::class, 'index'])->name('user.favorit.index');
+Route::get('/user/rating/{buku_id}', [RatingController::class, 'index'])->name('user.rating.index');
+Route::post('/user/rating/{buku_id}', [RatingController::class, 'store'])->name('user.rating.store');
+Route::delete('/admin/rating/{id}', [RatingController::class, 'destroy'])->name('admin.rating.destroy');
+
+
+
 
 
 Route::post('/favorit/{id}', [FavoritController::class, 'store'])->name('user.favorit.store');
@@ -111,9 +123,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 Route::middleware('auth')->group(function () {
     Route::get('riwayat', [RiwayatController::class, 'index'])->name('user.riwayat.index');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    //Profile Semua Role
+    Route::get('/profile', [ProfilController::class, 'index'])->name('profil.index');
+    Route::put('/profile', [ProfilController::class, 'update'])->name('profil.update');
+    Route::delete('/profile', [ProfilController::class, 'destroy'])->name('profil.destroy');
 });
 
 require __DIR__.'/auth.php';

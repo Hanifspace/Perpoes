@@ -14,7 +14,7 @@ class KatalogController extends Controller
 
     public function index(Request $request)
     {   
-        $bukus = buku::with('kategori')
+        $bukus = buku::with('kategori', 'ratings')
             ->when($request->search, function($query, $search) {
                 $query->where('judul', 'like', "%{$search}%")
                     ->orWhere('penulis', 'like', "%{$search}%");

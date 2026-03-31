@@ -99,7 +99,7 @@ class BukuController extends Controller
      */
     public function update(Request $request, buku $buku)
     {
-         $validated = $request->validate([
+        $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'kode_buku' => 'required|string|max:100|unique:bukus,kode_buku,' . $buku->id,
             'kategori_id' => 'required|exists:kategoris,id',
@@ -108,6 +108,7 @@ class BukuController extends Controller
             'tahun_terbit' => 'required|digits:4|integer|min:1000|max:' . date('Y'),
             'stok' => 'required|integer|min:0',
             'cover' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'sinopsis' => 'nullable|string', 
         ]);
 
         if ($request->hasFile('cover')) {

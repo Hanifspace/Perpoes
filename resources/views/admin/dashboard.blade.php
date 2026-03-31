@@ -24,19 +24,16 @@
     </div>
   </div>
 
-  {{-- KPI Cards (Dummy angka) --}}
+  {{-- KPI Cards --}}
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-    {{-- Buku --}}
     <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="h-11 w-11 rounded-xl bg-blue-600/10 text-blue-600 flex items-center justify-center">
-            <i class="fa-solid fa-book"></i>
-          </div>
-          <div>
-            <p class="text-sm text-slate-500">Jumlah Buku</p>
-            <p class="text-2xl font-bold text-slate-900">{{ $bookCount }}</p>
-          </div>
+      <div class="flex items-center gap-3">
+        <div class="h-11 w-11 rounded-xl bg-blue-600/10 text-blue-600 flex items-center justify-center">
+          <i class="fa-solid fa-book"></i>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Jumlah Buku</p>
+          <p class="text-2xl font-bold text-slate-900">{{ $bookCount }}</p>
         </div>
       </div>
       <div class="mt-4">
@@ -44,17 +41,14 @@
       </div>
     </div>
 
-    {{-- Kategori --}}
     <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="h-11 w-11 rounded-xl bg-indigo-600/10 text-indigo-600 flex items-center justify-center">
-            <i class="fa-solid fa-layer-group"></i>
-          </div>
-          <div>
-            <p class="text-sm text-slate-500">Jumlah Kategori</p>
-            <p class="text-2xl font-bold text-slate-900">{{ $kategoriCount }}</p>
-          </div>
+      <div class="flex items-center gap-3">
+        <div class="h-11 w-11 rounded-xl bg-indigo-600/10 text-indigo-600 flex items-center justify-center">
+          <i class="fa-solid fa-layer-group"></i>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Jumlah Kategori</p>
+          <p class="text-2xl font-bold text-slate-900">{{ $kategoriCount }}</p>
         </div>
       </div>
       <div class="mt-4">
@@ -62,17 +56,14 @@
       </div>
     </div>
 
-    {{-- Petugas --}}
     <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="h-11 w-11 rounded-xl bg-emerald-600/10 text-emerald-600 flex items-center justify-center">
-            <i class="fa-solid fa-user-shield"></i>
-          </div>
-          <div>
-            <p class="text-sm text-slate-500">Jumlah Petugas</p>
-            <p class="text-2xl font-bold text-slate-900">{{ $petugasCount }}</p>
-          </div>
+      <div class="flex items-center gap-3">
+        <div class="h-11 w-11 rounded-xl bg-emerald-600/10 text-emerald-600 flex items-center justify-center">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Jumlah Petugas</p>
+          <p class="text-2xl font-bold text-slate-900">{{ $petugasCount }}</p>
         </div>
       </div>
       <div class="mt-4">
@@ -80,17 +71,14 @@
       </div>
     </div>
 
-    {{-- Pengguna --}}
     <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="h-11 w-11 rounded-xl bg-amber-600/10 text-amber-600 flex items-center justify-center">
-            <i class="fa-solid fa-users"></i>
-          </div>
-          <div>
-            <p class="text-sm text-slate-500">Jumlah Pengguna</p>
-            <p class="text-2xl font-bold text-slate-900">{{ $penggunaCount }}</p>
-          </div>
+      <div class="flex items-center gap-3">
+        <div class="h-11 w-11 rounded-xl bg-amber-600/10 text-amber-600 flex items-center justify-center">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div>
+          <p class="text-sm text-slate-500">Jumlah Pengguna</p>
+          <p class="text-2xl font-bold text-slate-900">{{ $penggunaCount }}</p>
         </div>
       </div>
       <div class="mt-4">
@@ -100,7 +88,7 @@
   </div>
 
   {{-- Section bawah --}}
-  <div class="grid grid-cols-1 gap-4 xl:grid-cols-3">
+  <div class="grid grid-cols-1 gap-4 xl:grid-cols-2">
 
     {{-- Quick Actions --}}
     <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -165,7 +153,58 @@
         </a>
       </div>
     </div>
-   </div>
+
+    {{-- Tips & Info --}}
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm flex flex-col">
+      <h3 class="text-base font-semibold text-slate-900">Tips Pengelolaan</h3>
+      <p class="mt-1 text-sm text-slate-600">Panduan singkat untuk menjaga koleksi tetap teratur.</p>
+
+      <div class="mt-4 flex flex-col gap-3 flex-1">
+
+        <div class="flex gap-3 p-3 rounded-xl bg-blue-50 border border-blue-100">
+          <div class="h-8 w-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-book text-sm"></i>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-slate-800">Perbarui stok rutin</p>
+            <p class="text-xs text-slate-500 mt-0.5">Pastikan stok buku selalu akurat agar pengguna tahu ketersediaan.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-3 p-3 rounded-xl bg-indigo-50 border border-indigo-100">
+          <div class="h-8 w-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-layer-group text-sm"></i>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-slate-800">Kategorikan dengan benar</p>
+            <p class="text-xs text-slate-500 mt-0.5">Kategori yang tepat memudahkan pengguna menemukan buku yang dicari.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-3 p-3 rounded-xl bg-emerald-50 border border-emerald-100">
+          <div class="h-8 w-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-image text-sm"></i>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-slate-800">Upload cover buku</p>
+            <p class="text-xs text-slate-500 mt-0.5">Buku dengan cover lebih menarik perhatian dan meningkatkan minat baca.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-3 p-3 rounded-xl bg-amber-50 border border-amber-100">
+          <div class="h-8 w-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-star text-sm"></i>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-slate-800">Pantau ulasan pengguna</p>
+            <p class="text-xs text-slate-500 mt-0.5">Ulasan membantu mengetahui kualitas koleksi dan kepuasan pembaca.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 
 </div>
 @endsection

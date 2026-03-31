@@ -1,71 +1,96 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PERPOESTAKAAN - Perpustakaan Digital Modern</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            50: '#eff6ff',
-                            100: '#dbeafe', 
-                            200: '#bfdbfe',
-                            300: '#93c5fd',
-                            400: '#60a5fa',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            800: '#1e40af',
-                            900: '#1e3a8a'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body class="bg-gradient-to-br from-primary-50 to-blue-100 min-h-screen">
+{{-- resources/views/partials/navbar.blade.php --}}
 
-    {{-- Navbar --}}
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                {{-- Logo --}}
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-book-open text-primary-600 text-2xl"></i>
-                    <span class="text-2xl font-bold text-primary-700">PERPOESTAKAAN</span>
-                </div>
+<style>
+    :root {
+        --ink: #1e3a8a;
+        --cream: #eff6ff;
+        --warm: #dbeafe;
+        --accent: #2563eb;
+        --muted: #64748b;
+        --border: #bfdbfe;
+    }
 
-                {{-- Navigation Menu --}}
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#beranda" class="text-gray-700 hover:text-primary-600 transition duration-300">Beranda</a>
-                    <a href="#tentang" class="text-gray-700 hover:text-primary-600 transition duration-300">Tentang</a>
-                    <a href="#koleksi" class="text-gray-700 hover:text-primary-600 transition duration-300">Koleksi</a>
-                    <a href="#layanan" class="text-gray-700 hover:text-primary-600 transition duration-300">Layanan</a>
-                    <a href="#kontak" class="text-gray-700 hover:text-primary-600 transition duration-300">Kontak</a>
-                </div>
+    .font-display { font-family: 'Playfair Display', serif; }
 
-                {{-- Auth Buttons --}}
-                <div class="flex items-center space-x-4">
-                    <a href="{{ route('login') }}" class="text-primary-600 hover:text-primary-700 font-medium transition duration-300">
-                        <i class="fas fa-sign-in-alt mr-2"></i>Login
-                    </a>
-                    <a href="{{ route('register') }}" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition duration-300">
-                        <i class="fas fa-user-plus mr-2"></i>Register
-                    </a>
-                </div>
+    nav {
+        background: var(--cream);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+    }
 
-                {{-- Mobile Menu Button --}}
-                <div class="md:hidden">
-                    <button class="text-gray-700 hover:text-primary-600">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
+    .nav-link {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--muted);
+        text-decoration: none;
+        letter-spacing: 0.03em;
+        transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--ink); }
+
+    .btn-primary {
+        background: var(--ink);
+        color: var(--cream);
+        padding: 0.55rem 1.4rem;
+        border-radius: 4px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        transition: background 0.2s, transform 0.15s;
+        display: inline-block;
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+
+    .btn-ghost {
+        color: var(--ink);
+        padding: 0.55rem 1.2rem;
+        border-radius: 4px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        text-decoration: none;
+        border: 1px solid var(--border);
+        transition: border-color 0.2s, background 0.2s;
+        display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--ink); background: var(--warm); }
+
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: block; }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+<nav>
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="flex items-center justify-between h-16">
+
+            <a href="#beranda" class="font-display text-xl font-bold text-[var(--ink)] tracking-tight" style="text-decoration:none;">
+                PERPOESTAKAAN
+            </a>
+
+            <div class="hidden md:flex items-center gap-8">
+                <a href="{{ route ('welcome') }}" class="nav-link">Beranda</a>
             </div>
+
+            <div class="hidden md:flex items-center gap-3">
+                <a href="{{ route('login') }}"    class="btn-ghost">Masuk</a>
+                <a href="{{ route('register') }}" class="btn-primary">Daftar</a>
+            </div>
+
+            <button id="menu-toggle" class="md:hidden text-[var(--muted)]" onclick="toggleMenu()">
+                <i class="fas fa-bars text-lg"></i>
+            </button>
         </div>
-    </nav>
+    </div>
+</nav>
+
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('open');
+    }
+</script>

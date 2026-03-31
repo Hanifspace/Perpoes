@@ -42,6 +42,7 @@ class PenggunaController extends Controller
     {
         $users = User::where('role', 'user')->get();
         return view('user.dashboard', compact('users'));
+        
     }
 
 

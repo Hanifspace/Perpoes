@@ -13,10 +13,18 @@ class FavoritController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-        $bukus = $user->favorit; 
+        $search = $request->query('search');
+
+        $bukus = auth()->user()->favorit()
+            ->with('kategori')
+            ->when($search, function ($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                ->orWhere('penulis', 'like', "%{$search}%");
+            })
+            ->get();
+
         return view('user.favorit.index', compact('bukus'));
     }
 

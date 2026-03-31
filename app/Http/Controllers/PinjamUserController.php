@@ -26,7 +26,7 @@ class PinjamUserController extends Controller
      */
     public function create($buku_id)
     {
-        $buku = Buku::findOrFail($buku_id);  
+        $buku = Buku::with('kategori')->findOrFail($buku_id);
         return view('user.pinjam.create', compact('buku'));  
     }
 
@@ -68,9 +68,14 @@ class PinjamUserController extends Controller
      */
     public function show(string $id)
     {
-        $buku = Buku::findOrFail($id);
-        $buku->load('kategori');
-        return view('user.pinjam.show', compact('buku'));
+        $buku = Buku::with(['kategori', 'ratings.user'])->findOrFail($id);
+
+        $pernahPinjam = Pinjam::where('user_id', Auth::id())
+                            ->where('buku_id', $id)
+                            ->where('status', 'dikembalikan')
+                            ->exists();
+
+        return view('user.pinjam.show', compact('buku', 'pernahPinjam'));
     }
 
     /**

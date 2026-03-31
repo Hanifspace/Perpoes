@@ -225,9 +225,9 @@
                 <button id="profileBtn" type="button"
                         class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
                         onclick="toggleProfileDropdown()">
-                    <div class="h-9 w-9 rounded-full profile-avatar text-white flex items-center justify-center shadow-md">
-                        <i class="fa-solid fa-user text-xs"></i>
-                    </div>
+                        <div class="h-9 w-9 rounded-full profile-avatar text-white flex items-center justify-center shadow-md text-sm font-bold">
+                            {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+                        </div>
                     <div class="hidden lg:block text-left leading-tight">
                         <div class="text-xs font-semibold text-slate-900">
                             {{ auth()->user()->nama_lengkap ?? 'Administrator' }}
@@ -245,7 +245,7 @@
                         <div class="text-xs text-slate-500 mt-1">{{ auth()->user()->email ?? 'admin@perpoestakaan.com' }}</div>
                     </div>
 
-                    <a href="{{ route('profile.edit') }}"
+                    <a href="{{ route('profil.index') }}"
                        class="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors border-t border-slate-200">
                         <i class="fa-solid fa-id-badge text-blue-600 w-4"></i>
                         <span>Lihat Profile</span>
